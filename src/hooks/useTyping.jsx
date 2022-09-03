@@ -6,19 +6,19 @@ export default function useTyping(text, timeout = 400) {
 
   const endTyping = () => {
     setIsTyping(false)
-    clearInterval(timeoutRef.current)
+    clearTimeout(timeoutRef.current)
   }
 
   useEffect(() => {
-    if (!isTyping) {
-      setIsTyping(true)
-      timeoutRef.current = setInterval(endTyping, timeout)
+    if (isTyping) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = setTimeout(endTyping, timeout)
     } else {
-        clearInterval(timeoutRef.current)
-        timeoutRef.current = setInterval(endTyping, timeout)
+      setIsTyping(true)
+      timeoutRef.current = setTimeout(endTyping, timeout)
     }
 
-    return () => clearInterval(timeoutRef.current)
+    return () => clearTimeout(timeoutRef.current)
   }, [text])
 
   return isTyping
